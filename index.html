@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gerador de Recibo • Celso Motorista</title>
+  <title>Recibo • Celso Motorista</title>
+
   <style>
     :root{
       --bg:#0b0f14;
@@ -12,14 +13,15 @@
       --muted:#a8b3c7;
       --line:rgba(255,255,255,.10);
 
-      /* Laranja */
+      /* Tema Laranja */
       --orange:#fb923c;
       --orange2:#f97316;
+      --orange3:#ea580c;
 
-      --danger:#fb7185;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -30,6 +32,7 @@
         var(--bg);
       color:var(--text);
     }
+
     header{
       padding:20px 16px 10px;
       max-width:1200px;
@@ -41,7 +44,8 @@
       flex-wrap:wrap;
     }
     header h1{ margin:0; font-size:18px; font-weight:900; letter-spacing:.2px; }
-    header p{ margin:6px 0 0; color:var(--muted); font-size:13px; max-width:780px; line-height:1.35; }
+    header p{ margin:6px 0 0; color:var(--muted); font-size:13px; max-width:860px; line-height:1.35; }
+
     .wrap{
       max-width:1200px;
       margin:0 auto;
@@ -68,7 +72,7 @@
       justify-content:space-between;
       margin-bottom:10px;
     }
-    .btns{ display:flex; gap:8px; flex-wrap:wrap; }
+    .btns{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 
     button{
       border:1px solid var(--line);
@@ -77,7 +81,7 @@
       padding:10px 12px;
       border-radius:12px;
       cursor:pointer;
-      font-weight:800;
+      font-weight:850;
       font-size:13px;
       transition:.15s transform, .15s background, .15s border, .15s box-shadow;
       user-select:none;
@@ -85,15 +89,11 @@
     button:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.18); }
     button:active{ transform: translateY(1px); }
 
-    .btn-accent{
-      border-color: rgba(249,115,22,.45);
-    }
+    .btn-accent{ border-color: rgba(249,115,22,.45); }
     .btn-accent:hover{
       background: rgba(249,115,22,.12);
       box-shadow: 0 0 0 3px rgba(249,115,22,.12);
     }
-    .btn-danger{ border-color: rgba(251,113,133,.35); }
-    .btn-danger:hover{ background: rgba(251,113,133,.12); }
 
     .grid{
       display:grid;
@@ -124,10 +124,12 @@
       box-shadow: 0 0 0 3px rgba(249,115,22,.14);
     }
 
-    /* Recibo */
+    .hint{ color:var(--muted); font-size:12px; line-height:1.35; margin-top:10px; }
+
+    /* ===== Preview "cartão" ===== */
     .receipt-stage{ display:flex; justify-content:center; padding:10px 0; }
     .receipt{
-      width: 380px;
+      width: 420px;
       max-width: 100%;
       background: #0b1220;
       border: 1px solid rgba(255,255,255,.10);
@@ -141,38 +143,66 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(680px 280px at 20% 0%, rgba(251,146,60,.16), transparent 55%),
-        radial-gradient(680px 300px at 86% 10%, rgba(249,115,22,.14), transparent 60%);
+        radial-gradient(720px 300px at 18% 0%, rgba(251,146,60,.16), transparent 55%),
+        radial-gradient(720px 320px at 86% 12%, rgba(249,115,22,.14), transparent 60%);
       pointer-events:none;
     }
-    .r-topband{
+
+    .r-top{
       position:relative;
-      padding:14px 16px 10px;
+      padding:14px 16px 12px;
       border-bottom:1px dashed rgba(255,255,255,.14);
       background:
-        linear-gradient(90deg, rgba(249,115,22,.18), rgba(249,115,22,0) 55%),
+        linear-gradient(90deg, rgba(249,115,22,.18), rgba(249,115,22,0) 60%),
         rgba(255,255,255,.02);
     }
-    .r-brandrow{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .r-top-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .logo-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 200px;
+    }
+    .logo{
+      width:46px; height:46px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      display:grid;
+      place-items:center;
+    }
+    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .logo svg{ width:100%; height:100%; display:block; }
+
     .r-brand{
       font-weight:950;
       letter-spacing:.2px;
       font-size:14px;
-      display:flex;
-      align-items:center;
-      gap:8px;
+      line-height:1.15;
     }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: linear-gradient(180deg, var(--orange), var(--orange2));
-      box-shadow: 0 0 0 6px rgba(249,115,22,.10);
-      flex:0 0 auto;
-      margin-top:3px;
+    .r-issuer{
+      color:rgba(232,238,247,.90);
+      font-size:12.5px;
+      margin-top:4px;
     }
-    .r-company{ color:rgba(232,238,247,.92); font-size:12.5px; margin-top:3px; }
-    .r-total{ font-size:24px; font-weight:950; letter-spacing:.2px; text-align:right; white-space:nowrap; }
+
+    .r-total{
+      font-size:26px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-align:right;
+      white-space:nowrap;
+    }
     .r-meta{
-      margin-top:8px;
+      margin-top:10px;
       display:flex;
       justify-content:space-between;
       gap:10px;
@@ -184,6 +214,7 @@
     }
 
     .r-section{ padding:12px 16px; position:relative; }
+
     .chip{
       display:inline-flex;
       align-items:center;
@@ -194,20 +225,19 @@
       background: rgba(249,115,22,.10);
       color:rgba(255,255,255,.92);
       font-size:11.5px;
-      font-weight:850;
+      font-weight:900;
     }
+
     .r-blocktitle{
-      margin:0 0 8px;
-      font-size:12px;
-      color:rgba(168,179,199,.95);
-      letter-spacing:.2px;
+      margin:0 0 10px;
       display:flex;
       align-items:center;
       gap:8px;
-      text-transform:uppercase;
       flex-wrap:wrap;
     }
-    .r-address{ font-size:12.5px; line-height:1.35; color:rgba(232,238,247,.92); }
+    .r-msg{ color:rgba(232,238,247,.86); font-size:12px; }
+
+    .r-address{ font-size:12.7px; line-height:1.35; color:rgba(232,238,247,.92); }
     .r-time{
       margin-top:8px;
       font-family:var(--mono);
@@ -219,62 +249,108 @@
       flex-wrap:wrap;
     }
 
-    .r-client{
-      margin-top:10px;
+    .r-box{
+      margin-top:12px;
       padding:10px 12px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
     }
-    .r-client .line{
+    .r-box .line{
       display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
       font-size:12.5px; padding:4px 0;
     }
-    .r-client .label{ color:rgba(168,179,199,.95); }
-    .r-client .value{ font-family:var(--mono); color:rgba(232,238,247,.95); }
+    .r-box .label{ color:rgba(168,179,199,.95); }
+    .r-box .value{ font-family:var(--mono); color:rgba(232,238,247,.95); }
 
-    .r-lines{ border-top:1px solid rgba(255,255,255,.08); padding-top:10px; margin-top:10px; }
+    .r-lines{ border-top:1px solid rgba(255,255,255,.08); padding-top:10px; margin-top:12px; }
     .r-item{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; padding:5px 0; color:rgba(232,238,247,.92); }
     .r-item .k{ color:rgba(168,179,199,.95); }
     .r-item .v{ font-family:var(--mono); }
-    .r-strong{ font-weight:950; font-size:13.5px; }
-    .r-sub{ color:rgba(168,179,199,.95); font-size:12px; margin-top:10px; line-height:1.35; }
+    .r-strong{ font-weight:1000; font-size:13.5px; }
 
-    .r-foot{ padding:12px 16px 16px; border-top:1px dashed rgba(255,255,255,.14); position:relative; }
+    .r-foot{
+      padding:12px 16px 16px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      position:relative;
+    }
     .r-foot a{ color: var(--orange); text-decoration:none; word-break:break-all; }
+    .r-sub{ color:rgba(168,179,199,.95); font-size:12px; margin-top:8px; line-height:1.35; }
 
-    /* Print só o recibo */
+    /* ===== MODO A4 (PDF mais estiloso) ===== */
+    /* Na tela, o preview é o cartão. No print, vira A4 bonito. */
     @media print{
       body{ background:#fff; color:#000; }
       header, .wrap > .panel:first-child{ display:none !important; }
+
       .wrap{ padding:0; display:block; }
-      .panel{ border:none; box-shadow:none; }
+      .panel{ border:none; box-shadow:none; padding:0; }
       .receipt-stage{ padding:0; }
+
+      /* Força layout A4 */
+      @page { size: A4; margin: 14mm; }
+
       .receipt{
-        width: 80mm;
-        border: none;
-        border-radius: 0;
+        width: auto;
+        max-width: none;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
         box-shadow:none;
         background:#fff;
         color:#000;
       }
       .receipt:before{ display:none; }
-      .r-topband{ background:#fff; border-bottom:1px dashed #999; }
-      .r-item .k, .r-sub, .r-blocktitle, .r-client .label{ color:#333; }
-      .r-meta, .r-time, .r-item .v, .r-client .value{ color:#000; }
-      .r-foot a{ color:#000; text-decoration:underline; }
-      .chip{ border:1px solid #999; background:#fff; color:#000; }
-      .dot{ box-shadow:none; }
+
+      .r-top{
+        background:
+          linear-gradient(90deg, rgba(249,115,22,.18), rgba(249,115,22,0) 60%),
+          #fff;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .r-meta{ color:#111; }
+      .r-address, .r-time, .r-item, .r-box .value{ color:#111; }
+      .r-item .k, .r-box .label, .r-sub{ color:#374151; }
+      .r-lines{ border-top:1px solid #e5e7eb; }
+      .r-foot{ border-top:1px solid #e5e7eb; }
+      .chip{
+        border:1px solid rgba(249,115,22,.45);
+        background: rgba(249,115,22,.10);
+        color:#111;
+      }
+      .r-foot a{ color:#111; text-decoration:underline; }
+
+      /* “Assinatura / carimbo” */
+      .sign{
+        margin-top:14px;
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:10px;
+      }
+      .sign .box{
+        border:1px dashed #9ca3af;
+        border-radius:12px;
+        padding:12px;
+        min-height:70px;
+        font-size:12px;
+        color:#374151;
+      }
+      .sign .title{ font-weight:800; color:#111; margin-bottom:6px; }
     }
+    .sign{ display:none; } /* só aparece no print */
+    @media print{ .sign{ display:grid; } }
   </style>
 </head>
+
 <body>
   <header>
     <div>
       <h1>Gerador de Recibo • Celso Motorista</h1>
-      <p>Campos editáveis (cliente + CPF/CNPJ + empresa). Para gerar PDF: clique em <b>Imprimir</b> e escolha “Salvar como PDF”.</p>
+      <p>
+        Logo no PDF (SVG ou upload), modo de impressão A4 estiloso, e campos PJ completos (CNPJ/telefone/endereço do emitente + CPF/CNPJ do cliente).
+        Para gerar: clique em <b>Imprimir</b> e escolha “Salvar como PDF”.
+      </p>
     </div>
-    <div class="chip">🧾 Celso Motorista • Laranja</div>
+    <div class="chip">🧾 Tema laranja • PDF A4</div>
   </header>
 
   <main class="wrap">
@@ -285,14 +361,16 @@
           <button class="btn-accent" id="btnPrint">Imprimir / Salvar PDF</button>
           <button id="btnCopyJson">Copiar JSON</button>
           <button id="btnDownloadJson">Baixar JSON</button>
-          <label for="fileJson" style="margin:0">
-            <input id="fileJson" type="file" accept="application/json" style="display:none" />
-            <button type="button" id="btnImport">Importar JSON</button>
+
+          <label style="margin:0">
+            <input id="fileLogo" type="file" accept="image/*" style="display:none" />
+            <button type="button" id="btnLogo">Enviar logo (PNG/JPG)</button>
           </label>
+          <button type="button" id="btnLogoReset">Voltar logo padrão</button>
         </div>
+
         <div class="btns">
-          <button id="btnNow">Preencher com agora</button>
-          <button class="btn-danger" id="btnReset">Reset</button>
+          <button id="btnNow">Data/hora agora</button>
         </div>
       </div>
 
@@ -302,8 +380,22 @@
           <input data-bind="marca" placeholder="Celso Motorista" />
         </div>
         <div>
-          <label>Empresa/Motorista (emitente)</label>
-          <input data-bind="emissor" placeholder="Celso Motorista" />
+          <label>Emitente (nome)</label>
+          <input data-bind="emissorNome" placeholder="Celso Motorista" />
+        </div>
+
+        <div>
+          <label>CNPJ do emitente</label>
+          <input data-bind="emissorCnpj" placeholder="00.000.000/0000-00" />
+        </div>
+        <div>
+          <label>Telefone / WhatsApp</label>
+          <input data-bind="emissorTelefone" placeholder="(88) 9xxxx-xxxx" />
+        </div>
+
+        <div style="grid-column:1/-1">
+          <label>Endereço do emitente</label>
+          <input data-bind="emissorEndereco" placeholder="Rua..., Bairro..., Cidade - UF" />
         </div>
 
         <div>
@@ -311,17 +403,26 @@
           <input data-bind="totalTopo" placeholder="R$ 0,00" />
         </div>
         <div>
-          <label>Data (Topo)</label>
-          <input data-bind="dataTopo" placeholder="dd/mm/aaaa" />
+          <label>Nº do Recibo</label>
+          <input data-bind="reciboNumero" placeholder="000123" />
         </div>
 
         <div>
-          <label>Hora (Topo)</label>
-          <input data-bind="horaTopo" placeholder="hh:mm:ss" />
+          <label>Data</label>
+          <input data-bind="dataTopo" placeholder="dd/mm/aaaa" />
         </div>
         <div>
-          <label>Tipo</label>
-          <input data-bind="taximetro" placeholder="Corrida | Carro" />
+          <label>Hora</label>
+          <input data-bind="horaTopo" placeholder="hh:mm:ss" />
+        </div>
+
+        <div>
+          <label>Serviço / Tipo</label>
+          <input data-bind="tipo" placeholder="Corrida | Carro" />
+        </div>
+        <div>
+          <label>Mensagem curta (opcional)</label>
+          <input data-bind="mensagem" placeholder="Ex.: Viagem executiva • pagamento à vista" />
         </div>
 
         <div>
@@ -365,42 +466,6 @@
         </div>
 
         <div>
-          <label>Total (Detalhamento)</label>
-          <input data-bind="totalDetalhe" placeholder="R$ 0,00" />
-        </div>
-        <div>
-          <label>Valor cobrado</label>
-          <input data-bind="valorCobrado" placeholder="R$ 0,00" />
-        </div>
-
-        <div>
-          <label>KM rodados (texto)</label>
-          <input data-bind="kmTexto" placeholder="0,00 KM = R$ 0,00" />
-        </div>
-        <div>
-          <label>Tempo de viagem (texto)</label>
-          <input data-bind="tempoTexto" placeholder="0,00 min = R$ 0,00" />
-        </div>
-
-        <div>
-          <label>Custo fixo</label>
-          <input data-bind="custoFixo" placeholder="R$ 0,00" />
-        </div>
-        <div>
-          <label>Descontos e ajustes</label>
-          <input data-bind="descontos" placeholder="R$ 0,00" />
-        </div>
-
-        <div>
-          <label>Saldo pendente</label>
-          <input data-bind="saldoPendente" placeholder="R$ 0,00" />
-        </div>
-        <div>
-          <label>Resumo</label>
-          <input data-bind="resumoTaximetro" placeholder="0,00 KM | 0,00 min" />
-        </div>
-
-        <div>
           <label>Veículo</label>
           <input data-bind="veiculo" placeholder="Marca / Modelo" />
         </div>
@@ -409,9 +474,31 @@
           <input data-bind="placa" placeholder="ABC1D23" />
         </div>
 
-        <div style="grid-column:1/-1">
-          <label>Mensagem curta (opcional)</label>
-          <input data-bind="mensagem" placeholder="Ex.: Viagem executiva • pagamento à vista" />
+        <div>
+          <label>KM (texto)</label>
+          <input data-bind="kmTexto" placeholder="0,00 KM = R$ 0,00" />
+        </div>
+        <div>
+          <label>Tempo (texto)</label>
+          <input data-bind="tempoTexto" placeholder="0,00 min = R$ 0,00" />
+        </div>
+
+        <div>
+          <label>Custo fixo</label>
+          <input data-bind="custoFixo" placeholder="R$ 0,00" />
+        </div>
+        <div>
+          <label>Descontos/Ajustes</label>
+          <input data-bind="descontos" placeholder="R$ 0,00" />
+        </div>
+
+        <div>
+          <label>Saldo pendente</label>
+          <input data-bind="saldoPendente" placeholder="R$ 0,00" />
+        </div>
+        <div>
+          <label>Valor cobrado</label>
+          <input data-bind="valorCobrado" placeholder="R$ 0,00" />
         </div>
 
         <div style="grid-column:1/-1">
@@ -428,30 +515,62 @@
           <input data-bind="rodape2" placeholder="Mensagem de rodapé" />
         </div>
       </div>
+
+      <p class="hint">
+        A logo aparece no PDF. Se você enviar sua logo (PNG/JPG), ela fica salva localmente no navegador.
+      </p>
     </section>
 
     <!-- Preview -->
     <section class="panel">
       <div class="receipt-stage">
-        <article class="receipt">
-          <div class="r-topband">
-            <div class="r-brandrow">
-              <div>
-                <div class="r-brand"><span class="dot"></span><span id="v_marca">Celso Motorista</span></div>
-                <div class="r-company" id="v_emissor">Celso Motorista</div>
+        <article class="receipt" id="receipt">
+          <div class="r-top">
+            <div class="r-top-row">
+              <div class="logo-wrap">
+                <div class="logo" id="logoSlot">
+                  <!-- SVG padrão (imprime perfeito) -->
+                  <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Celso Motorista">
+                    <defs>
+                      <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0" stop-color="#fb923c"/>
+                        <stop offset="1" stop-color="#f97316"/>
+                      </linearGradient>
+                    </defs>
+                    <rect x="0" y="0" width="64" height="64" rx="16" fill="url(#g)"/>
+                    <path d="M18 38c0-8 6-14 14-14h14v6H32c-4 0-8 4-8 8s4 8 8 8h14v6H32c-8 0-14-6-14-14Z" fill="rgba(255,255,255,.95)"/>
+                    <circle cx="44.5" cy="41.5" r="4.5" fill="rgba(255,255,255,.95)"/>
+                  </svg>
+                </div>
+
+                <div>
+                  <div class="r-brand" id="v_marca">Celso Motorista</div>
+                  <div class="r-issuer" id="v_emissorNome">Celso Motorista</div>
+                </div>
               </div>
-              <div class="r-total" id="v_totalTopo">R$ 0,00</div>
+
+              <div style="text-align:right">
+                <div class="r-total" id="v_totalTopo">R$ 0,00</div>
+                <div class="r-meta">
+                  <span>Nº <span id="v_reciboNumero">—</span></span>
+                  <span id="v_dataHora">—</span>
+                </div>
+              </div>
             </div>
-            <div class="r-meta">
-              <span id="v_dataTopo">dd/mm/aaaa</span>
-              <span id="v_horaTopo">hh:mm:ss</span>
+
+            <div class="r-meta" style="margin-top:10px">
+              <span>CNPJ: <span id="v_emissorCnpj">—</span></span>
+              <span>Contato: <span id="v_emissorTelefone">—</span></span>
+            </div>
+            <div class="r-meta" style="margin-top:6px">
+              <span id="v_emissorEndereco">—</span>
             </div>
           </div>
 
           <div class="r-section">
             <div class="r-blocktitle">
-              <span class="chip" id="v_taximetro">Corrida | Carro</span>
-              <span id="v_mensagem" style="color:rgba(232,238,247,.88); font-size:12px;"></span>
+              <span class="chip" id="v_tipo">Corrida | Carro</span>
+              <span class="r-msg" id="v_mensagem"></span>
             </div>
 
             <div class="r-address" id="v_origem">Origem…</div>
@@ -461,10 +580,15 @@
             </div>
             <div class="r-address" style="margin-top:10px" id="v_destino">Destino…</div>
 
-            <div class="r-client">
+            <div class="r-box">
               <div class="line"><span class="label">Cliente</span><span class="value" id="v_clienteNome">—</span></div>
               <div class="line" id="empresaRow"><span class="label">Empresa</span><span class="value" id="v_clienteEmpresa">—</span></div>
               <div class="line"><span class="label" id="v_docTipoLabel">CPF</span><span class="value" id="v_docNumero">—</span></div>
+            </div>
+
+            <div class="r-box" style="margin-top:10px">
+              <div class="line"><span class="label">Veículo</span><span class="value" id="v_veiculo">—</span></div>
+              <div class="line"><span class="label">Placa</span><span class="value" id="v_placa">—</span></div>
             </div>
 
             <div class="r-lines">
@@ -473,7 +597,7 @@
                 <span class="v" id="v_totalDetalhe">R$ 0,00</span>
               </div>
 
-              <div class="r-item"><span class="k">KM rodados</span><span class="v" id="v_kmTexto">—</span></div>
+              <div class="r-item"><span class="k">KM</span><span class="v" id="v_kmTexto">—</span></div>
               <div class="r-item"><span class="k">Tempo</span><span class="v" id="v_tempoTexto">—</span></div>
               <div class="r-item"><span class="k">Custo fixo</span><span class="v" id="v_custoFixo">—</span></div>
               <div class="r-item"><span class="k">Descontos</span><span class="v" id="v_descontos">—</span></div>
@@ -482,16 +606,6 @@
               <div class="r-item r-strong" style="margin-top:6px">
                 <span class="k">Valor cobrado</span>
                 <span class="v" id="v_valorCobrado">R$ 0,00</span>
-              </div>
-
-              <div class="r-sub">
-                <div style="margin-top:6px">
-                  <b id="v_veiculo">Veículo…</b><br/>
-                  Placa: <span class="v" id="v_placa">—</span>
-                </div>
-                <div style="margin-top:8px">
-                  <span class="v" id="v_resumoTaximetro">—</span>
-                </div>
               </div>
             </div>
           </div>
@@ -502,8 +616,20 @@
               <a id="v_linkMapa" href="#" target="_blank" rel="noopener noreferrer">https://...</a>
             </div>
 
-            <div class="r-sub" style="margin-top:10px" id="v_rodape1">—</div>
+            <div class="r-sub" id="v_rodape1">—</div>
             <div class="r-sub" id="v_rodape2">—</div>
+
+            <!-- assinatura só no print -->
+            <div class="sign">
+              <div class="box">
+                <div class="title">Assinatura do Cliente</div>
+                <div>_____________________________________</div>
+              </div>
+              <div class="box">
+                <div class="title">Celso Motorista</div>
+                <div id="v_emitenteResumo">_____________________________________</div>
+              </div>
+            </div>
           </div>
         </article>
       </div>
@@ -511,28 +637,37 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "recibo_celso_motorista_v3";
+    const STORAGE_KEY = "recibo_celso_v4";
+    const LOGO_KEY = "recibo_celso_logo_dataurl";
 
     const defaults = {
       marca: "Celso Motorista",
-      emissor: "Celso Motorista",
+      emissorNome: "Celso Motorista",
+      emissorCnpj: "",
+      emissorTelefone: "",
+      emissorEndereco: "",
+
+      reciboNumero: "",
 
       totalTopo: "R$ 0,00",
-      dataTopo: "dd/mm/aaaa",
-      horaTopo: "hh:mm:ss",
+      dataTopo: "",
+      horaTopo: "",
 
-      docTipo: "CPF",
-      docNumero: "",
+      tipo: "Corrida | Carro",
+      mensagem: "",
+
       clienteNome: "",
       clienteEmpresa: "",
-
-      taximetro: "Corrida | Carro",
-      mensagem: "",
+      docTipo: "CPF",
+      docNumero: "",
 
       origem: "",
       horaInicio: "",
       horaFim: "",
       destino: "",
+
+      veiculo: "",
+      placa: "",
 
       totalDetalhe: "R$ 0,00",
       kmTexto: "",
@@ -542,14 +677,10 @@
       saldoPendente: "R$ 0,00",
       valorCobrado: "R$ 0,00",
 
-      veiculo: "",
-      placa: "",
-      resumoTaximetro: "",
-
       linkMapa: "",
 
       rodape1: "Recibo gerado por Celso Motorista.",
-      rodape2: "Contato: (coloque aqui seu telefone/whatsapp)"
+      rodape2: "Obrigado pela preferência."
     };
 
     const state = loadState();
@@ -591,45 +722,51 @@
       if(el) el.textContent = value ?? "";
     }
 
+    function smartDash(s){ return (s && String(s).trim()) ? String(s).trim() : "—"; }
+
     function render(){
-      setText("v_marca", state.marca || "Celso Motorista");
-      setText("v_emissor", state.emissor || "Celso Motorista");
+      setText("v_marca", smartDash(state.marca));
+      setText("v_emissorNome", smartDash(state.emissorNome));
 
-      setText("v_totalTopo", state.totalTopo || "R$ 0,00");
-      setText("v_dataTopo", state.dataTopo || "—");
-      setText("v_horaTopo", state.horaTopo || "—");
+      setText("v_emissorCnpj", smartDash(state.emissorCnpj));
+      setText("v_emissorTelefone", smartDash(state.emissorTelefone));
+      setText("v_emissorEndereco", smartDash(state.emissorEndereco));
 
-      setText("v_taximetro", state.taximetro || "—");
+      setText("v_totalTopo", smartDash(state.totalTopo));
+      setText("v_reciboNumero", smartDash(state.reciboNumero));
 
+      const data = smartDash(state.dataTopo);
+      const hora = smartDash(state.horaTopo);
+      setText("v_dataHora", (data !== "—" || hora !== "—") ? `${data} ${hora}`.trim() : "—");
+
+      setText("v_tipo", smartDash(state.tipo));
       const msg = (state.mensagem || "").trim();
-      document.getElementById("v_mensagem").textContent = msg ? ("• " + msg) : "";
+      setText("v_mensagem", msg ? ("• " + msg) : "");
 
       setText("v_origem", (state.origem || "").trim() || "Origem…");
       setText("v_horaInicio", (state.horaInicio || "").trim() || "--:--:--");
       setText("v_horaFim", (state.horaFim || "").trim() || "--:--:--");
       setText("v_destino", (state.destino || "").trim() || "Destino…");
 
-      // Cliente
-      setText("v_clienteNome", (state.clienteNome || "").trim() || "—");
-      setText("v_docTipoLabel", state.docTipo || "CPF");
-      setText("v_docNumero", (state.docNumero || "").trim() || "—");
+      setText("v_clienteNome", smartDash(state.clienteNome));
+      setText("v_docTipoLabel", smartDash(state.docTipo));
+      setText("v_docNumero", smartDash(state.docNumero));
 
       const empresa = (state.clienteEmpresa || "").trim();
       const empresaRow = document.getElementById("empresaRow");
       setText("v_clienteEmpresa", empresa || "—");
       empresaRow.style.display = empresa ? "" : "none";
 
-      setText("v_totalDetalhe", state.totalDetalhe || "R$ 0,00");
+      setText("v_veiculo", smartDash(state.veiculo));
+      setText("v_placa", smartDash(state.placa));
+
+      setText("v_totalDetalhe", smartDash(state.totalDetalhe));
       setText("v_kmTexto", (state.kmTexto || "").trim() || "—");
       setText("v_tempoTexto", (state.tempoTexto || "").trim() || "—");
-      setText("v_custoFixo", state.custoFixo || "—");
-      setText("v_descontos", state.descontos || "—");
-      setText("v_saldoPendente", state.saldoPendente || "—");
-      setText("v_valorCobrado", state.valorCobrado || "R$ 0,00");
-
-      setText("v_veiculo", (state.veiculo || "").trim() || "Veículo…");
-      setText("v_placa", (state.placa || "").trim() || "—");
-      setText("v_resumoTaximetro", (state.resumoTaximetro || "").trim() || "—");
+      setText("v_custoFixo", smartDash(state.custoFixo));
+      setText("v_descontos", smartDash(state.descontos));
+      setText("v_saldoPendente", smartDash(state.saldoPendente));
+      setText("v_valorCobrado", smartDash(state.valorCobrado));
 
       const link = (state.linkMapa || "").trim();
       const mapWrap = document.getElementById("mapWrap");
@@ -646,26 +783,50 @@
 
       setText("v_rodape1", (state.rodape1 || "").trim() || "—");
       setText("v_rodape2", (state.rodape2 || "").trim() || "—");
+
+      // resumo no bloco "Celso Motorista" da assinatura
+      const resumo = [
+        (state.emissorNome || "").trim(),
+        (state.emissorCnpj || "").trim() ? ("CNPJ: " + state.emissorCnpj.trim()) : "",
+        (state.emissorTelefone || "").trim() ? ("Contato: " + state.emissorTelefone.trim()) : ""
+      ].filter(Boolean).join(" • ");
+      setText("v_emitenteResumo", resumo || "_____________________________________");
+
+      renderLogoFromStorage();
     }
 
     function pad2(n){ return String(n).padStart(2,"0"); }
-    function formatDateBR(d){
-      return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
-    }
-    function formatTime(d){
-      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+    function formatDateBR(d){ return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`; }
+    function formatTime(d){ return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`; }
+
+    // ===== LOGO (upload e armazenamento) =====
+    function renderLogoFromStorage(){
+      const slot = document.getElementById("logoSlot");
+      const dataUrl = localStorage.getItem(LOGO_KEY);
+      if(dataUrl){
+        slot.innerHTML = `<img alt="Logo Celso Motorista" src="${dataUrl}">`;
+      } // senão fica o SVG padrão (já no HTML)
     }
 
-    // Botões
+    function resetLogo(){
+      localStorage.removeItem(LOGO_KEY);
+      const slot = document.getElementById("logoSlot");
+      slot.innerHTML = `
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Celso Motorista">
+          <defs>
+            <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#fb923c"/>
+              <stop offset="1" stop-color="#f97316"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="64" height="64" rx="16" fill="url(#g)"/>
+          <path d="M18 38c0-8 6-14 14-14h14v6H32c-4 0-8 4-8 8s4 8 8 8h14v6H32c-8 0-14-6-14-14Z" fill="rgba(255,255,255,.95)"/>
+          <circle cx="44.5" cy="41.5" r="4.5" fill="rgba(255,255,255,.95)"/>
+        </svg>`;
+    }
+
+    // ===== Ações =====
     document.getElementById("btnPrint").addEventListener("click", () => window.print());
-
-    document.getElementById("btnReset").addEventListener("click", () => {
-      Object.assign(state, structuredClone(defaults));
-      saveState();
-      bindInputs();
-      render();
-      toast("Resetado 🔄");
-    });
 
     document.getElementById("btnNow").addEventListener("click", () => {
       const d = new Date();
@@ -674,9 +835,10 @@
       saveState();
       bindInputs();
       render();
-      toast("Atualizado ⏱️");
+      toast("Data/hora atualizadas ✅");
     });
 
+    // JSON
     document.getElementById("btnCopyJson").addEventListener("click", async () => {
       const json = JSON.stringify(state, null, 2);
       try{
@@ -701,24 +863,28 @@
       toast("Baixado 📦");
     });
 
-    const fileJson = document.getElementById("fileJson");
-    document.getElementById("btnImport").addEventListener("click", () => fileJson.click());
-    fileJson.addEventListener("change", async () => {
-      const file = fileJson.files?.[0];
+    // Upload logo
+    const fileLogo = document.getElementById("fileLogo");
+    document.getElementById("btnLogo").addEventListener("click", () => fileLogo.click());
+    fileLogo.addEventListener("change", async () => {
+      const file = fileLogo.files?.[0];
       if(!file) return;
-      try{
-        const text = await file.text();
-        const imported = JSON.parse(text);
-        Object.assign(state, structuredClone(defaults), imported);
-        saveState();
-        bindInputs();
+
+      // converte para DataURL (fica embutido e imprime no PDF)
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = String(reader.result || "");
+        localStorage.setItem(LOGO_KEY, dataUrl);
         render();
-        toast("Importado ✅");
-      }catch(e){
-        toast("JSON inválido ❌");
-      }finally{
-        fileJson.value = "";
-      }
+        toast("Logo aplicada ✅");
+      };
+      reader.readAsDataURL(file);
+      fileLogo.value = "";
+    });
+
+    document.getElementById("btnLogoReset").addEventListener("click", () => {
+      resetLogo();
+      toast("Logo padrão restaurada ✅");
     });
 
     // Toast
@@ -739,7 +905,7 @@
         el.style.color = "rgba(232,238,247,.96)";
         el.style.backdropFilter = "blur(10px)";
         el.style.fontSize = "13px";
-        el.style.fontWeight = "900";
+        el.style.fontWeight = "950";
         el.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
         el.style.zIndex = "9999";
         document.body.appendChild(el);
